@@ -64,10 +64,8 @@ aalice.initTasks()
 healDailyId = '63b1c445-f499-48fa-9e15-b414286d038a'
 healDailyIndex = aalice.dailyOrder.index(healDailyId)
 healDaily = aalice.dailys[healDailyIndex]
-
-# if not habotica.getTask(aalice.credentials, healDailyId)['completed']:
-# 	habotica.score(aalice.credentials, healDailyId, 'up')
-if not healDaily.completed == 'completed':
+if not healDaily.completed:
 	print("Scoring task")
 	healDaily.scoreTask('up')
+
 # checkMessages()
