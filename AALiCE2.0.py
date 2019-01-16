@@ -28,9 +28,10 @@ party = [aalice, sam, lauren]
 # 				idFile.write(message['id'] + "\n")
 # 	idFile.close()
 
-# Run Cron
-print("Running cron")
-aalice.cron()
+# Run Cron if needed
+if aalice.needsCron:
+	print("Running cron")
+	aalice.cron()
 
 
 # If any party member is below 30 health, immediately cast blessing (healAll) until above 30 if aalice has enough mana
@@ -68,4 +69,10 @@ if not healDaily.completed:
 	print("Scoring task")
 	healDaily.scoreTask('up')
 
+# Check for quest invite. Accept if needed
+if aalice.partyQuest['RSVPNeeded']:
+	print("Accepting quest")
+	response = habotica.acceptQuest(aalice.credentials)
+
 # checkMessages()
+
