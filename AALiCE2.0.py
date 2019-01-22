@@ -1,5 +1,6 @@
 import Habotica as habotica
 from Habotica import user
+import subroutines
 
 # Users
 print("Getting party")
@@ -73,6 +74,10 @@ if not healDaily.completed:
 if aalice.partyQuest['RSVPNeeded']:
 	print("Accepting quest")
 	response = habotica.acceptQuest(aalice.credentials)
+
+# Update sam's todo tags
+print("Checking dated tags")
+subroutines.datedTags(sam)
 
 # checkMessages()
 
