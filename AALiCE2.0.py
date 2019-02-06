@@ -75,9 +75,22 @@ if aalice.partyQuest['RSVPNeeded']:
 	print("Accepting quest")
 	response = habotica.acceptQuest(aalice.credentials)
 
-# Update sam's todo tags
-print("Checking dated tags")
+# Update sam and lauren's todo tags
+tagHabitId = '7b1c392e-72a5-4777-90c6-0f18738f320b'
+tagHabitIndex = aalice.habitOrder.index(tagHabitId)
+tagHabit = aalice.habits[tagHabitIndex]
+
+print("Checking Sam's dated tags")
+sam.initTasks()
 subroutines.datedTags(sam)
+print('Scoring habit')
+tagHabit.scoreTask('up')
+
+print("Checking Lauren's dated tags")
+lauren.initTasks()
+subroutines.datedTags(lauren)
+print('Scoring habit')
+tagHabit.scoreTask('up')
 
 # checkMessages()
 

@@ -15,22 +15,27 @@ def datedTags(usr):
 
 	# Create tags if they aren't already there
 	if "Today" not in tagDict.keys():
+		print("Creating tag 'Today'")
 		habotica.createTag(usr.credentials, "Today")
 		newTags = habotica.getTags(usr.credentials)['data']
 		tagDict = {i['name']:i['id'] for i in newTags}
 	if "Tomorrow" not in tagDict.keys():
+		print("Creating tag 'Tomorrow'")
 		habotica.createTag(usr.credentials, "Tomorrow")
 		newTags = habotica.getTags(usr.credentials)['data']
 		tagDict = {i['name']:i['id'] for i in newTags}
 	if "This week" not in tagDict.keys():
+		print("Creating tag 'This week'")
 		habotica.createTag(usr.credentials, "This week")
 		newTags = habotica.getTags(usr.credentials)['data']
 		tagDict = {i['name']:i['id'] for i in newTags}
 	if "This month" not in tagDict.keys():
+		print("Creating tag 'This month'")
 		habotica.createTag(usr.credentials, "This month")
 		newTags = habotica.getTags(usr.credentials)['data']
 		tagDict = {i['name']:i['id'] for i in newTags}
 	if "This year" not in tagDict.keys():
+		print("Creating tag 'This year'")
 		habotica.createTag(usr.credentials, "This year")
 		newTags = habotica.getTags(usr.credentials)['data']
 		tagDict = {i['name']:i['id'] for i in newTags}
@@ -53,9 +58,9 @@ def datedTags(usr):
 			dueDate = None
 		if dueDate != None and dueDate != '':
 			daysAway = daysFromNow(dueDate)
-			if daysAway <= 0:
+			if daysAway <= 1:
 				addTagDict["Today"] = True
-			elif daysAway == 1:
+			elif daysAway == 2:
 				addTagDict["Tomorrow"] = True
 			elif daysAway <= 7:
 				addTagDict["This week"] = True
@@ -82,6 +87,8 @@ def datedTags(usr):
 				addTagDict["This year"] = True
 
 		# Check task notes
+		if todo.notes == None: # Sometimes there aren't any notes.
+			todo.notes = ""
 		if "TDO:" in todo.notes:
 			targetText = todo.notes.split("TDO:")[1] # Get text after "TDO:"
 			targetText = targetText.replace(' ', '') # Remove spaces just in case
