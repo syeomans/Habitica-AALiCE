@@ -25,7 +25,6 @@ class user:
 		self.userV = response['userV']
 		self.notifications = response['notifications']
 		self.name = response['data']['profile']['name']
-		# self.guildIds = catchKeyError(response, "['data']['guilds']")
 		self.guildIds = response['data']['guilds'] if 'guilds' in response['data'].keys() else None
 		self.blurb = response['data']['profile']['blurb'] if 'blurb' in response['data']['profile'].keys() else None
 		self.challengeIds = response['data']['challenges'] if 'challenges' in response['data'].keys() else None
