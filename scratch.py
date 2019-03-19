@@ -1,5 +1,5 @@
-from Habotica.urlFunctions import getUrl
-from Habotica.user import user
+from urlFunctions import getUrl
+from user import user
 import json
 import csv
 import urllib2

@@ -1,5 +1,5 @@
-from urlFunctions import getUrl, postUrl, putUrl, deleteUrl
-from task import createChallengeTask, getChallengeTasks, habit, daily, todo, reward
+from Habotica.urlFunctions import getUrl, postUrl, putUrl, deleteUrl
+from Habotica.task import createChallengeTask, getChallengeTasks, habit, daily, todo, reward
 
 def catchKeyError(response, path):
 	"""

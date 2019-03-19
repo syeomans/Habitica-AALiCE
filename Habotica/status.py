@@ -1,4 +1,4 @@
-from urlFunctions import getUrl
+from Habotica.urlFunctions import getUrl
 
 def getAPIStatus():
 	"""

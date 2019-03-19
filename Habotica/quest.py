@@ -1,4 +1,4 @@
-from urlFunctions import postUrl
+from Habotica.urlFunctions import postUrl
 
 def abortQuest(creds, groupId = 'party'):
 	"""

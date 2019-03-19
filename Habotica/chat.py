@@ -1,4 +1,4 @@
-from urlFunctions import getUrl, postUrl, putUrl, deleteUrl
+from Habotica.urlFunctions import getUrl, postUrl, putUrl, deleteUrl
 
 class message:
 	def __init__(self, data):

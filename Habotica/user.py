@@ -1,22 +1,9 @@
-from urlFunctions import getUrl, postUrl, putUrl, deleteUrl
-from task import task, habit, daily, todo, reward, completedTodo, getTasks, getTaskList
-from chat import chat, getChat
-from group import group
-from challenge import challenge, getChallenges
+from Habotica.urlFunctions import getUrl, postUrl, putUrl, deleteUrl
+from Habotica.task import task, habit, daily, todo, reward, completedTodo, getTasks, getTaskList
+from Habotica.chat import chat, getChat
+from Habotica.group import group
+from Habotica.challenge import challenge, getChallenges
 import json
-
-def catchKeyError(response, path):
-	"""
-	Not meant for use outside initializing a user class
-
-	Attempts to set a variable based on a path to the data inside a user's authenticated profile. 
-	"""
-	try:
-		outstr = "output = response" + path
-		exec(outstr)
-		return(output)
-	except KeyError:
-		return(None)
 
 class user:
 	"""
@@ -38,9 +25,10 @@ class user:
 		self.userV = response['userV']
 		self.notifications = response['notifications']
 		self.name = response['data']['profile']['name']
-		self.guildIds = catchKeyError(response, "['data']['guilds']")
-		self.blurb = catchKeyError(response, "['data']['profile']['blurb']") 
-		self.challengeIds = catchKeyError(response, "['data']['challenges']")
+		# self.guildIds = catchKeyError(response, "['data']['guilds']")
+		self.guildIds = response['data']['guilds'] if 'guilds' in response['data'].keys() else None
+		self.blurb = response['data']['profile']['blurb'] if 'blurb' in response['data']['profile'].keys() else None
+		self.challengeIds = response['data']['challenges'] if 'challenges' in response['data'].keys() else None
 		self.inbox = response['data']['inbox']
 		self.lastCron = response['data']['lastCron']
 		self.training = response['data']['stats']['training']
@@ -89,28 +77,28 @@ class user:
 		self.mounts = response['data']['items']['mounts']
 		self.currentPet = response['data']['items']['currentPet']
 		self.currentMount = response['data']['items']['currentMount']
-		self.costumeBack = catchKeyError(response, "['data']['items']['gear']['costume']['back']")
-		self.costumeBody = catchKeyError(response, "['data']['items']['gear']['costume']['body']")
-		self.costumeHead = catchKeyError(response, "['data']['items']['gear']['costume']['head']")
-		self.costumeShield = catchKeyError(response, "['data']['items']['gear']['costume']['shield']")
-		self.costumeArmor = catchKeyError(response, "['data']['items']['gear']['costume']['armor']")
-		self.costumeWeapon = catchKeyError(response, "['data']['items']['gear']['costume']['weapon']")
-		self.costumeHeadAccessory = catchKeyError(response, "['data']['items']['gear']['costume']['headAccessory']")
-		self.costumeEyewear = catchKeyError(response, "['data']['items']['gear']['costume']['eyewear']")
-		self.equippedBack = catchKeyError(response, "['data']['items']['gear']['equipped']['back']")
-		self.equippedBody = catchKeyError(response, "['data']['items']['gear']['equipped']['body']")
-		self.equippedHead = catchKeyError(response, "['data']['items']['gear']['equipped']['head']")
-		self.equippedShield = catchKeyError(response, "['data']['items']['gear']['equipped']['shield']")
-		self.equippedArmor = catchKeyError(response, "['data']['items']['gear']['equipped']['armor']")
-		self.equippedWeapon = catchKeyError(response, "['data']['items']['gear']['equipped']['weapon']")
-		self.equippedHeadAccessory = catchKeyError(response, "['data']['items']['gear']['equipped']['headAccessory']")
-		self.equippedEyewear = catchKeyError(response, "['data']['items']['gear']['equipped']['eyewear']")
+		self.costumeBack = response['data']['items']['gear']['costume']['back'] if 'back' in response['data']['items']['gear']['costume'].keys() else None
+		self.costumeBody = response['data']['items']['gear']['costume']['body'] if 'body' in response['data']['items']['gear']['costume'].keys() else None
+		self.costumeHead = response['data']['items']['gear']['costume']['head'] if 'head' in response['data']['items']['gear']['costume'].keys() else None
+		self.costumeShield = response['data']['items']['gear']['costume']['shield'] if 'shield' in response['data']['items']['gear']['costume'].keys() else None
+		self.costumeArmor = response['data']['items']['gear']['costume']['armor'] if 'armor' in response['data']['items']['gear']['costume'].keys() else None
+		self.costumeWeapon = response['data']['items']['gear']['costume']['weapon'] if 'weapon' in response['data']['items']['gear']['costume'].keys() else None
+		self.costumeHeadAccessory = response['data']['items']['gear']['costume']['headAccessory'] if 'headAccessory' in response['data']['items']['gear']['costume'].keys() else None
+		self.costumeEyewear = response['data']['items']['gear']['costume']['eyewear'] if 'eyewear' in response['data']['items']['gear']['costume'].keys() else None
+		self.equippedBack = response['data']['items']['gear']['equipped']['back'] if 'back' in response['data']['items']['gear']['equipped'].keys() else None
+		self.equippedBody = response['data']['items']['gear']['equipped']['body'] if 'body' in response['data']['items']['gear']['equipped'].keys() else None
+		self.equippedHead = response['data']['items']['gear']['equipped']['head'] if 'head' in response['data']['items']['gear']['equipped'].keys() else None
+		self.equippedShield = response['data']['items']['gear']['equipped']['shield'] if 'shield' in response['data']['items']['gear']['equipped'].keys() else None
+		self.equippedArmor = response['data']['items']['gear']['equipped']['armor'] if 'armor' in response['data']['items']['gear']['equipped'].keys() else None
+		self.equippedWeapon = response['data']['items']['gear']['equipped']['weapon'] if 'weapon' in response['data']['items']['gear']['equipped'].keys() else None
+		self.equippedHeadAccessory = response['data']['items']['gear']['equipped']['headAccessory'] if 'headAccessory' in response['data']['items']['gear']['equipped'].keys() else None
+		self.equippedEyewear = response['data']['items']['gear']['equipped']['eyewear'] if 'eyewear' in response['data']['items']['gear']['equipped'].keys() else None
 		self.ownedGear = response['data']['items']['gear']['owned'].keys()
 		self.lastDrop = response['data']['items']['lastDrop']
 		self.food = response['data']['items']['food']
 		self.eggs = response['data']['items']['eggs']
 		self.quests = response['data']['items']['quests']
-		self.partyQuest = catchKeyError(response, "['data']['party']['quest']")
+		self.partyQuest = response['data']['party']['quest'] if 'quest' in response['data']['party'].keys() else None
 		self.specialItems = response['data']['items']['special']
 		self.flags = response['data']['flags']
 		self.pushDevices = response['data']['pushDevices']
@@ -118,8 +106,8 @@ class user:
 		self.balance = response['data']['balance']
 		self.todosHistory = response['data']['history']['todos']
 		self.expHistory = response['data']['history']['exp']
-		self.party = catchKeyError(response, "['data']['party']")
-		self.partyId = catchKeyError(response, "['data']['party']['_id']")
+		self.party = response['data']['party'] if 'party' in response['data'].keys() else None
+		self.partyId = response['data']['party']['_id'] if '_id' in response['data']['party'].keys() else None
 		self.habitOrder =  response['data']['tasksOrder']['habits']
 		self.dailyOrder =  response['data']['tasksOrder']['dailys']
 		self.todoOrder =  response['data']['tasksOrder']['todos']
@@ -402,7 +390,7 @@ class user:
 		else:
 			url = 'https://habitica.com/api/v3/user/class/cast/' + spellId + '?' + targetId
 
-		response = json.loads(postUrl(url, self.credentials))
+		response = postUrl(url, self.credentials)
 		if response['success'] == True:
 			costDict = {'fireball': 15, 'mpheal': 30, 'earth': 35, 'frost': 40,
 						'smash': 10, 'defensiveStance': 25, 'valorousPresence': 20, 'intimidate': 15,

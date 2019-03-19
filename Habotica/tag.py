@@ -1,4 +1,4 @@
-from urlFunctions import getUrl, postUrl, putUrl, deleteUrl
+from Habotica.urlFunctions import getUrl, postUrl, putUrl, deleteUrl
 
 def createTag(creds, name):
 	"""
