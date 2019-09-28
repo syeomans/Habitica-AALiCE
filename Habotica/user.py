@@ -7,7 +7,7 @@ import json
 
 class user:
 	"""
-	Class of User objects. 
+	Class of User objects.
 
 	All functions in the User section of the API docs are supported as of 12/31/2018
 	"""
@@ -44,7 +44,7 @@ class user:
 		self.lvl = response['data']['stats']['lvl']
 		self.toNextLevel = response['data']['stats']['toNextLevel']
 		self.buffs = response['data']['stats']['buffs']
-		self._class = response['data']['stats']['class']
+		self.rpgclass = response['data']['stats']['class']
 		self.points = response['data']['stats']['points']
 		self.asleep = response['data']['preferences']['sleep']
 		self.wearingCostume = response['data']['preferences']['costume']
@@ -130,15 +130,15 @@ class user:
 
 	def initTasks(self):
 		### Setting up the user's task lists is tricky because we want this to be done with as few
-		### API calls as possible. The getTasks() function gets all of the data in one call, but 
-		### the data is returned unsorted. We need to then sort each data point into one of 4 task 
-		### lists at the correct index. 
-		### Note: This is so ugly and I'm so sorry, but this mess took the execution time of creating  
-		### user objects down from 6 seconds to 3 seconds on my machine. 
+		### API calls as possible. The getTasks() function gets all of the data in one call, but
+		### the data is returned unsorted. We need to then sort each data point into one of 4 task
+		### lists at the correct index.
+		### Note: This is so ugly and I'm so sorry, but this mess took the execution time of creating
+		### user objects down from 6 seconds to 3 seconds on my machine.
 
 		# Get the user's tasks. (This contains all data on all tasks, but is unsorted)
 		tasks = getTasks(self.credentials)['data']
-		
+
 		# Initialize task lists and fill with null values. These will be filled later.
 		self.habits = [None for i in range(0,len(self.habitOrder))]
 		self.dailys = [None for i in range(0,len(self.dailyOrder))]
@@ -149,7 +149,7 @@ class user:
 		for thisTask in tasks:
 			thisType = thisTask['type']
 			thisId = thisTask['id']
-			# Sort into habit list 
+			# Sort into habit list
 			if thisType == 'habit':
 				index = 0
 				# Find the correct index
@@ -160,7 +160,7 @@ class user:
 						break
 					# Post-increment
 					index += 1
-			# Sort into daily list 
+			# Sort into daily list
 			elif thisType == 'daily':
 				index = 0
 				# Find the correct index
@@ -171,7 +171,7 @@ class user:
 						break
 					# Post-increment
 					index += 1
-			# Sort into todo list 
+			# Sort into todo list
 			elif thisType == 'todo':
 				index = 0
 				# Find the correct index
@@ -182,7 +182,7 @@ class user:
 						break
 					# Post-increment
 					index += 1
-			# Sort into reward list 
+			# Sort into reward list
 			elif thisType == 'reward':
 				index = 0
 				# Find the correct index
@@ -195,20 +195,20 @@ class user:
 					index += 1
 
 		# Remove any ghost tasks that may have been picked up. I have no idea what these are, but they
-		# definitely exist and I now believe in ghosts. 
+		# definitely exist and I now believe in ghosts.
 		for i in self.habits:
-			if i == None: 
+			if i == None:
 				self.habits.remove(i)
 		for i in self.dailys:
-			if i == None: 
+			if i == None:
 				self.dailys.remove(i)
 		for i in self.todos:
-			if i == None: 
+			if i == None:
 				self.todos.remove(i)
 		for i in self.rewards:
-			if i == None: 
+			if i == None:
 				self.rewards.remove(i)
-		
+
 		# I don't have a way of putting completed todos in order, so marvel at the single line!
 		self.completedTodos = getTaskList(self.credentials, 'completedTodos')
 		# (I know, right?  I could have done the rest of them in one line too if it weren't so slow.)
@@ -228,7 +228,7 @@ class user:
 	def allocateAttributePoint(self, stat=None):
 		"""
 		User - Allocate a single attribute point
-		
+
 		stat: String	Default ='str' Allowed values: "str", "con", "int", "per"
 		"""
 		url = "https://habitica.com/api/v3/user/allocate"
@@ -237,10 +237,10 @@ class user:
 
 	def allocateAllAttributePoints(self):
 		"""
-		Uses the user's chosen automatic allocation method, or if none, assigns all to STR. 
-		
+		Uses the user's chosen automatic allocation method, or if none, assigns all to STR.
+
 		Note: will return success, even if there are 0 points to allocate.
-		
+
 		stat: String. Default ='str'. Allowed values: "str", "con", "int", "per".
 		"""
 		url = "https://habitica.com/api/v3/user/allocate-now"
@@ -249,7 +249,7 @@ class user:
 	def allocateAttributePoints(self, INT=None, STR=None, CON=None, PER=None):
 		"""
 		User - Allocate multiple attribute points
-		
+
 		INT: number of attribute points to allocate to intelligence
 		STR: number of attribute points to allocate to strength
 		CON: number of attribute points to allocate to constitution
@@ -262,7 +262,7 @@ class user:
 	def block(self, uuid):
 		"""
 		User - Block / unblock a user from sending you a PM
-		
+
 		uuid: The user id of the user to block / unblock
 		"""
 		url = "https://habitica.com/api/v3/user/block/" + str(uuid)
@@ -271,7 +271,7 @@ class user:
 	def buyHealthPotion(self):
 		"""
 		User - Buy a health potion
-		
+
 		"""
 		url = "https://habitica.com/api/v3/user/buy-health-potion"
 		return(postUrl(url, self.credentials))
@@ -279,15 +279,15 @@ class user:
 	def buyMysterySet(self, key):
 		"""
 		Buy a mystery set with a mystic hourglass
-		
+
 		key: The shorthand date of the mystery set. ex: '201703' is the key for March 2017's mystery item set.
-			To see all current mystery set keys, use the content library: getContent('mystery').keys() 
+			To see all current mystery set keys, use the content library: getContent('mystery').keys()
 			Keys as of June 18, 2018:
-			[u'201703', u'301703', u'201601', u'301404', u'201603', u'201602', u'201605', u'201604', u'201607', u'201606', 
-			u'201609', u'201608', u'201403', u'201402', u'wondercon', u'201407', u'201406', u'201405', u'201404', u'201701', 
-			u'201409', u'201408', u'201704', u'201705', u'201706', u'201707', u'201508', u'201509', u'201502', u'201503', 
-			u'201501', u'201506', u'201507', u'201504', u'201505', u'201708', u'201709', u'201612', u'201610', u'201611', 
-			u'201712', u'201711', u'201710', u'301405', u'201805', u'201804', u'201803', u'201802', u'201801', u'201410', 
+			[u'201703', u'301703', u'201601', u'301404', u'201603', u'201602', u'201605', u'201604', u'201607', u'201606',
+			u'201609', u'201608', u'201403', u'201402', u'wondercon', u'201407', u'201406', u'201405', u'201404', u'201701',
+			u'201409', u'201408', u'201704', u'201705', u'201706', u'201707', u'201508', u'201509', u'201502', u'201503',
+			u'201501', u'201506', u'201507', u'201504', u'201505', u'201708', u'201709', u'201612', u'201610', u'201611',
+			u'201712', u'201711', u'201710', u'301405', u'201805', u'201804', u'201803', u'201802', u'201801', u'201410',
 			u'201411', u'201412', u'301704', u'201511', u'201510', u'201512', u'201702']
 		"""
 		url = "https://habitica.com/api/v3/user/buy-mystery-set/" + str(key)
@@ -296,9 +296,9 @@ class user:
 	def buyQuest(self, key):
 		"""
 		Buy a quest with gold
-		
+
 		key: The shorthand name of the quest. ex: 'atom1' is the questKey of "Attack of the Mundane, part 1."
-			To see all current quest keys, use the content library: getContent('quests').keys() 
+			To see all current quest keys, use the content library: getContent('quests').keys()
 			Keys as of Apr. 14, 2018:
 			['armadillo', 'atom1', 'atom2', 'atom3', 'axolotl', 'badger', 'basilist', 'beetle', 'bewilder', 'bunny',
 			'burnout', 'butterfly', 'cheetah', 'cow', 'dilatory', 'dilatoryDistress1', 'dilatoryDistress2',
@@ -309,7 +309,7 @@ class user:
 			'monkey', 'moon1', 'moon2', 'moon3', 'moonstone1', 'moonstone2', 'moonstone3', 'nudibranch', 'octopus', 'owl',
 			'peacock', 'penguin', 'pterodactyl', 'rat', 'rock', 'rooster', 'sabretooth', 'sheep', 'slime', 'sloth',
 			'snail', 'snake', 'spider', 'squirrel', 'stoikalmCalamity1', 'stoikalmCalamity2', 'stoikalmCalamity3',
-			'stressbeast', 'taskwoodsTerror1', 'taskwoodsTerror2', 'taskwoodsTerror3', 'treeling', 'trex', 'trex_undead', 
+			'stressbeast', 'taskwoodsTerror1', 'taskwoodsTerror2', 'taskwoodsTerror3', 'treeling', 'trex', 'trex_undead',
 			'triceratops', 'turtle', 'unicorn', 'vice1', 'vice2', 'vice3', 'whale', 'yarn']
 		"""
 		url = "https://habitica.com/api/v3/user/buy-quest/" + str(key)
@@ -318,7 +318,7 @@ class user:
 	def buyArmoire(self, key):
 		"""
 		Buy an armoire item
-		
+
 		"""
 		url = "https://habitica.com/api/v3/user/buy-armoire"
 		return(postUrl(url, self.credentials))
@@ -326,11 +326,11 @@ class user:
 	def buy(self, key):
 		"""
 		Buy gear, armoire or potion
-		
+
 		Under the hood uses UserBuyGear, UserBuyPotion and UserBuyArmoire
-		
-		key: the item to buy. 
-			To see all current keys, import Content.py and use print(getContent('gear')['flat'].keys())  
+
+		key: the item to buy.
+			To see all current keys, import Content.py and use print(getContent('gear')['flat'].keys())
 			(there are a lot of them)
 		"""
 		url = "https://habitica.com/api/v3/user/buy/" + str(key)
@@ -339,16 +339,16 @@ class user:
 	def buySpecialSpell(self, key):
 		"""
 		Buy special "spell" item
-		
-		Includes gift cards (e.g., birthday card), and avatar Transformation Items and their antidotes 
+
+		Includes gift cards (e.g., birthday card), and avatar Transformation Items and their antidotes
 		(e.g., Snowball item and Salt reward).
-		
-		key: The special item to buy. Must be one of the keys from "content.special", such as birthday, 
+
+		key: The special item to buy. Must be one of the keys from "content.special", such as birthday,
 			snowball, salt.
 			To see all current keys, import Content.py and use print(getContent('special').keys())
 			Keys as of Aug. 14, 2018:
-			['spookySparkles', 'petalFreePotion', 'sand', 'greeting', 'opaquePotion', 
-			'shinySeed', 'seafoam', 'valentine', 'thankyou', 'snowball', 'birthday', 
+			['spookySparkles', 'petalFreePotion', 'sand', 'greeting', 'opaquePotion',
+			'shinySeed', 'seafoam', 'valentine', 'thankyou', 'snowball', 'birthday',
 			'congrats', 'goodluck', 'getwell', 'salt', 'nye']
 		"""
 		url = "https://habitica.com/api/v3/user/buy/" + str(key)
@@ -357,28 +357,28 @@ class user:
 	def cast(self, spellId, targetId = 'none'):
 		"""
 		Cast a skill (spell) on a target
-		
+
 		spellId: the skill to cast. Takes a string of characters.
-		targetId: Query parameter, necessary if the spell is cast on a party member or task. 
+		targetId: Query parameter, necessary if the spell is cast on a party member or task.
 			Not used if the spell is cast on the user or the user's current party.
 			Takes a string containing a UUID.
-		spellId to name mapping: 
+		spellId to name mapping:
 		Mage
 			fireball: "Burst of Flames" (target: task ID)
 			mpheal: "Ethereal Surge" (target: none)
 			earth: "Earthquake" (target: none)
 			frost: "Chilling Frost" (target: none)
-		Warrior 
+		Warrior
 			smash: "Brutal Smash" (target: taskId)
 			defensiveStance: "Defensive Stance" (target: none)
 			valorousPresence: "Valorous Presence" (target: none)
 			intimidate: "Intimidating Gaze" (target: none)
-		Rogue 
+		Rogue
 			pickPocket: "Pickpocket" (target: taskId)
 			backStab: "Backstab" (target: taskId)
 			toolsOfTrade: "Tools of the Trade" (target: none)
 			stealth: "Stealth" (target: none)
-		Healer 
+		Healer
 			heal: "Healing Light" (target: none)
 			protectAura: "Protective Aura" (target: none)
 			brightness: "Searing Brightness" (target: none)
@@ -401,11 +401,11 @@ class user:
 	def changeClass(self, newClass):
 		"""
 		Change class
-		
-		User must be at least level 10. If ?class is defined and user.flags.classSelected is 
-		false it'll change the class. If user.preferences.disableClasses it'll enable classes, 
+
+		User must be at least level 10. If ?class is defined and user.flags.classSelected is
+		false it'll change the class. If user.preferences.disableClasses it'll enable classes,
 		otherwise it sets user.flags.classSelected to false (costs 3 gems)
-		
+
 		newClass: one of {warrior|rogue|wizard|healer}
 		"""
 		url = "https://habitica.com/api/v3/user/change-class?class=" + newClass
@@ -414,7 +414,7 @@ class user:
 	def deleteMessage(self, messageId):
 		"""
 		Delete a message
-		
+
 		id: te id of the message to delete
 		"""
 		url = "https://habitica.com/api/v3/user/messages/" + messageId
@@ -423,7 +423,7 @@ class user:
 	def deleteAllMessages(self):
 		"""
 		Delete all messages
-		
+
 		"""
 		url = "https://habitica.com/api/v3/user/messages"
 		return(deleteUrl(url, self.credentials))
@@ -431,7 +431,7 @@ class user:
 	def deleteUser(self, password, feedback=""):
 		"""
 		Delete an authenticated user's account
-		
+
 		password: The user's password if the account uses local authentication
 		feedback: User's optional feedback explaining reasons for deletion
 		"""
@@ -442,10 +442,10 @@ class user:
 	def deleteSocialAuthentication(self, network):
 		"""
 		Delete social authentication method
-		
-		Remove a social authentication method (only facebook supported) from a user profile. 
+
+		Remove a social authentication method (only facebook supported) from a user profile.
 		The user must have local authentication enabled
-		
+
 		"""
 		url = "https://habitica.com/api/v3/user/auth/social/" + network
 		return(deleteUrl(url, self.credentials))
@@ -453,7 +453,7 @@ class user:
 	def disableClasses(self):
 		"""
 		Disable classes
-		
+
 		"""
 		url = "https://habitica.com/api/v3/user/disable-classes"
 		return(postUrl(url, self.credentials))
@@ -461,7 +461,7 @@ class user:
 	def equip(self, itemType, key):
 		"""
 		Disable classes
-		
+
 		itemType: The type of item to equip or unequip
 			Allowed values: "mount", "pet", "costume", "equipped"
 		key: The item to equip or unequip
@@ -472,12 +472,12 @@ class user:
 	def feed(self, pet, food):
 		"""
 		User - Feed a pet
-		
-		pet: the string for the pet you want to feed. 
+
+		pet: the string for the pet you want to feed.
 			To see all pet UUID strings, use the content library: getContent('pets').keys()
 			To see all quest pet UUID strings, use the content library: getContent('premiumPets').keys()
 			To see all special pet UUID strings, use the content library: getContent('specialPets').keys()
-		food: the string for the food you want to feed your pet. 
+		food: the string for the food you want to feed your pet.
 			To see all food UUID strings, use the content library: getContent('food').keys()
 		"""
 		url = "https://habitica.com/api/v3/user/feed/" + pet + "/" + food
@@ -486,10 +486,10 @@ class user:
 	def getAnonymizedUserData(self):
 		"""
 		User - Get anonymized user data
-		
-		Returns the user's data without: Authentication information NewMessages/Invitations/Inbox Profile Purchased 
+
+		Returns the user's data without: Authentication information NewMessages/Invitations/Inbox Profile Purchased
 		information Contributor information Special items Webhooks Notifications
-		
+
 		"""
 		url = "https://habitica.com/api/v3/user/anonymized"
 		return(getUrl(url, self.credentials))
@@ -497,29 +497,29 @@ class user:
 	def getAuthenticatedProfile(self, userFields = None):
 		"""
 		User - Get the authenticated user's profile
-		
-		The user profile contains data related to the authenticated user including (but not limited to); 
+
+		The user profile contains data related to the authenticated user including (but not limited to);
 			Achievements
-			Authentications (including types and timestamps) 
-			Challenges 
-			Flags (including armoire, tutorial, tour etc...) 
-			Guilds History (including timestamps and values) 
-			Inbox 
-			Invitations (to parties/guilds) 
+			Authentications (including types and timestamps)
+			Challenges
+			Flags (including armoire, tutorial, tour etc...)
+			Guilds History (including timestamps and values)
+			Inbox
+			Invitations (to parties/guilds)
 			Items (character's full inventory)
-			New Messages (flags for groups/guilds that have new messages) 
-			Notifications 
-			Party (includes current quest information) 
-			Preferences (user selected prefs) 
-			Profile (name, photo url, blurb) 
-			Purchased (includes purchase history, gem purchased items, plans) 
-			PushDevices (identifiers for mobile devices authorized) 
-			Stats (standard RPG stats, class, buffs, xp, etc..) 
-			Tags 
+			New Messages (flags for groups/guilds that have new messages)
+			Notifications
+			Party (includes current quest information)
+			Preferences (user selected prefs)
+			Profile (name, photo url, blurb)
+			Purchased (includes purchase history, gem purchased items, plans)
+			PushDevices (identifiers for mobile devices authorized)
+			Stats (standard RPG stats, class, buffs, xp, etc..)
+			Tags
 			TasksOrder (list of all ids for dailys, habits, rewards and todos)
-		
-		
-		userFields: A list of comma separated user fields to be returned instead of the entire document. 
+
+
+		userFields: A list of comma separated user fields to be returned instead of the entire document.
 			Notifications are always returned.
 			Example usage: "achievements,items.mounts"
 		"""
@@ -533,7 +533,7 @@ class user:
 	def getGearAvailableForPurchase(self):
 		"""
 		User - Get the gear items available for purchase for the authenticated user
-		
+
 		"""
 		url = "https://habitica.com/api/v3/user/inventory/buy"
 		return(getUrl(url, self.credentials))
@@ -541,7 +541,7 @@ class user:
 	def getInAppRewards(self):
 		"""
 		User - Get the in app items appearing in the user's reward column
-		
+
 		"""
 		url = "https://habitica.com/api/v3/user/in-app-rewards"
 		return(getUrl(url, self.credentials))
@@ -549,10 +549,10 @@ class user:
 	def hatch(self, egg, hatchingPotion):
 		"""
 		User - Hatch a pet
-		
-		egg: the string for the egg you want to hatch 
+
+		egg: the string for the egg you want to hatch
 			To see all egg UUID strings, use the content library: getContent('eggs').keys()
-		hatchingPotion: the string for the hatching potion you want to use 
+		hatchingPotion: the string for the hatching potion you want to use
 			To see all hatching potion UUID strings, use the content library: getContent('hatchingPotions').keys()
 		"""
 		url = "https://habitica.com/api/v3/user/hatch/" + egg + "/" + hatchingPotion
@@ -562,7 +562,7 @@ class user:
 		"""
 		User - Login
 		Login a user with email / username and password
-		
+
 		username: Username or email of the user
 		password: The user's password
 		"""
@@ -573,7 +573,7 @@ class user:
 	def sleep(self):
 		"""
 		Make the user start / stop sleeping (resting in the Inn)
-		
+
 		"""
 		url = "https://habitica.com/api/v3/user/sleep"
 		return(postUrl(url, self.credentials))
@@ -581,7 +581,7 @@ class user:
 	def markPMsRead(self):
 		"""
 		Marks Private Messages as read
-		
+
 		"""
 		url = "https://habitica.com/api/v3/user/mark-pms-read"
 		return(postUrl(url, self.credentials))
@@ -589,12 +589,12 @@ class user:
 	def movePinnedItem(self, typ, path, position):
 		"""
 		Move a pinned item in the rewards column to a new position after being sorted
-		
+
 		type (shortened to typ because reserved words): No idea. It's missing from the docs.
 		path: The unique item path used for pinning (string)
-		position: Where to move the task (number) 
-			0 = top of the list. 
-			-1 = bottom of the list. (-1 means push to bottom). 
+		position: Where to move the task (number)
+			0 = top of the list.
+			-1 = bottom of the list. (-1 means push to bottom).
 			First position is 0
 
 		Returns an array of the new pinned items in order
@@ -612,7 +612,7 @@ class user:
 	def buyGemItem(self, itemType, key):
 		"""
 		Purchase Gem or Gem-purchasable item
-		
+
 		itemType: Type of item to purchase.
 			Allowed values: "gems", "eggs", "hatchingPotions", "premiumHatchingPotions", ",", ","
 		key: Item's key (use "gem" for purchasing gems)
@@ -623,7 +623,7 @@ class user:
 	def buyHourglassItem(self, itemType, key):
 		"""
 		Purchase Hourglass-purchasable item
-		
+
 		itemType: Type of item to purchase.
 			Allowed values: "pets", "mounts"
 		key: Ex: {Phoenix-Base}. The key for the mount/pet
@@ -634,7 +634,7 @@ class user:
 	def readCard(self, cardType):
 		"""
 		Read a card
-		
+
 		cardType: Type of card to read (e.g. - birthday, greeting, nye, thankyou, valentine)
 		"""
 		url = "https://habitica.com/api/v3/user/read-card/" + cardType
@@ -643,8 +643,8 @@ class user:
 	def register(self, username, email, password, confirmPassword):
 		"""
 		Register a new user with email, login name, and password or attach local auth to a social user
-		
-		username: Login name of the new user. Must be 1-36 characters, containing only a-z, 0-9, 
+
+		username: Login name of the new user. Must be 1-36 characters, containing only a-z, 0-9,
 			hyphens (-), or underscores (_).
 		email: Email address of the new user
 		password: Password for the new user
@@ -657,7 +657,7 @@ class user:
 	def releaseMounts(self):
 		"""
 		Release mounts
-		
+
 		"""
 		url = "https://habitica.com/api/v3/user/release-mounts"
 		return(postUrl(url, self.credentials))
@@ -665,7 +665,7 @@ class user:
 	def releasePetsAndMounts(self):
 		"""
 		Release pets and mounts and grants Triad Bingo
-		
+
 		"""
 		url = "https://habitica.com/api/v3/user/release-both"
 		return(postUrl(url, self.credentials))
@@ -707,7 +707,7 @@ class user:
 
 	def resetUser(self):
 		"""
-		I really don't know what this one does, and I'm afraid to test it. The docs aren't helpful. 
+		I really don't know what this one does, and I'm afraid to test it. The docs aren't helpful.
 
 		"""
 		url = "https://habitica.com/api/v4/user/reset"
@@ -776,7 +776,7 @@ class user:
 		"""
 		Some of the user items can be updated, such as preferences, flags and stats. ^
 
-		Example payload: 
+		Example payload:
 			{
 			    "achievements.habitBirthdays": 2,
 			    "profile.name": "MadPink",

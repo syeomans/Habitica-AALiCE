@@ -21,7 +21,7 @@ def checkMessages():
 				index = message['text'].find('say') + len('say') + 1
 				phrase = message['text'][index:]
 				print('Saying "' + phrase + '"')
-				habotica.postChat(aalice, phrase) 
+				habotica.postChat(aalice, phrase)
 				idFile.write(message['id'] + "\n")
 	idFile.close()
 
