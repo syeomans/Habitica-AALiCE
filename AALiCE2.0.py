@@ -34,47 +34,6 @@ if aalice.needsCron:
 	print("Running cron")
 	aalice.cron()
 
-# Check class and perform the correct operations
-if aalice.rpgclass == "healer":
-	# If any party member is below 30 health, immediately cast blessing (healAll) until above 30 if aalice has enough mana
-	for member in party:
-		while member.hp <= 30 and aalice.mp >= 25:
-			print("Casting Blessing")
-			aalice.cast('healAll')
-			# Update party member's hp
-			healing = (aalice.con + aalice.int + 5) * 0.075
-			for member in party:
-				member.hp = member.hp + healing if member.hp+healing <= 50 else 50
-
-	# If any party member is below 43 health, cast blessing if above 50% mana
-	for member in party:
-		while member.hp <= 43 and aalice.mp >= aalice.maxMP*0.5:
-			print("Casting Blessing")
-			aalice.cast('healAll')
-			# Update party member's hp
-			healing = (aalice.con + aalice.int + 5) * 0.075
-			for member in party:
-				member.hp = member.hp + healing if member.hp+healing <= 50 else 50
-
-	# If mana is above 80%, cast protective aura (protectAura)
-	while aalice.mp >= aalice.maxMP*0.8:
-		print("Casting Protective Aura")
-		aalice.cast('protectAura')
-
-elif aalice.rpgclass == "wizard":
-	# If party is on a quest, cast Earthquake once and then Burst of Flame until below 20% mana
-	if aalice.partyQuest['key'] != None:
-		print("Casting Earthquake")
-		aalice.cast('mpheal')
-		while aalice.mp >= aalice.maxMP*0.3:
-			print("Casting Burst of Flame")
-			aalice.cast('fireball')
-	# If party is not on a quest, cast Earthquake until below 80% mana
-	else:
-		while aalice.mp >= aalice.maxMP*0.8:
-			print("Casting Earthquake")
-			aalice.cast('mpheal')
-
 # Check off class action daily unless it's already marked as completed
 print("Initializing tasks")
 aalice.initTasks()
@@ -106,5 +65,54 @@ lauren.initTasks()
 subroutines.datedTags(lauren)
 print('Scoring habit')
 tagHabit.scoreTask('up')
+
+# Check class and perform the correct operations
+if aalice.rpgclass == "healer":
+	# If any party member is below 30 health, immediately cast blessing (healAll) until above 30 if aalice has enough mana
+	for member in party:
+		while member.hp <= 30 and aalice.mp >= 25:
+			print("Casting Blessing")
+			aalice.cast('healAll')
+			# Update party member's hp
+			healing = (aalice.con + aalice.int + 5) * 0.075
+			for member in party:
+				member.hp = member.hp + healing if member.hp+healing <= 50 else 50
+
+	# If any party member is below 43 health, cast blessing if above 50% mana
+	for member in party:
+		while member.hp <= 43 and aalice.mp >= aalice.maxMP*0.5:
+			print("Casting Blessing")
+			aalice.cast('healAll')
+			# Update party member's hp
+			healing = (aalice.con + aalice.int + 5) * 0.075
+			for member in party:
+				member.hp = member.hp + healing if member.hp+healing <= 50 else 50
+
+	# If mana is above 80%, cast protective aura (protectAura)
+	while aalice.mp >= aalice.maxMP*0.8:
+		print("Casting Protective Aura")
+		aalice.cast('protectAura')
+
+elif aalice.rpgclass == "wizard":
+	# If party is on a boss quest, cast Earthquake once and then Burst of Flame until below 30% mana
+	if aalice.partyQuest['key'] != None:
+		# Check if this is a boss quest
+		questContent = habotica.getContent(contentType="quests")
+		questKey = aalice.partyQuest['key']
+		if "boss" in questContent[questKey].keys() and aalice.mp >= aalice.maxMP*0.3:
+			# Cast Earthquake
+			print("Casting Earthquake")
+			aalice.cast('earth')
+			# Cast Burst of Flames until below 30% mana
+			while aalice.mp >= aalice.maxMP*0.3:
+				print("Casting Burst of Flames")
+				aalice.cast('fireball', tagHabitId)
+	# If party is not on a quest, cast Earthquake until below 80% mana
+	else:
+		while aalice.mp >= aalice.maxMP*0.8:
+			print("Casting Earthquake")
+			aalice.cast('earth')
+
+
 
 # checkMessages()

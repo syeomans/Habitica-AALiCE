@@ -387,7 +387,7 @@ class user:
 		if targetId == 'none':
 			url = 'https://habitica.com/api/v3/user/class/cast/' + spellId
 		else:
-			url = 'https://habitica.com/api/v3/user/class/cast/' + spellId + '?' + targetId
+			url = 'https://habitica.com/api/v3/user/class/cast/' + spellId + '?targetId=' + targetId
 
 		response = postUrl(url, self.credentials)
 		if response['success'] == True:
