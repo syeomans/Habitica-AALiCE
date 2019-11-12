@@ -274,7 +274,10 @@ class user:
 
 		"""
 		url = "https://habitica.com/api/v3/user/buy-health-potion"
-		return(postUrl(url, self.credentials))
+		response = postUrl(url, self.credentials)
+		if response['success'] == True:
+			self.hp += 15
+		return(response)
 
 	def buyMysterySet(self, key):
 		"""

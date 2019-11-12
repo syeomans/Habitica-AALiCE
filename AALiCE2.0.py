@@ -117,7 +117,6 @@ elif aalice.rpgclass == "wizard":
 while aalice.hp < 40:
 	print("Buying health potion")
 	aalice.buyHealthPotion()
-	aalice.hp += 15
 
 
 
