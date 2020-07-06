@@ -166,6 +166,44 @@ def datedTags(usr):
 			if tagDict[key] not in todo.tags and addTagDict[key] == True:
 				print('Adding tag "' + key + '" to task "' + todo.text + '"')
 				todo.addTag(tagDict[key])
+				
+def sortTodos(usr, tagOrder):				
+	# Configs
+	#sortTags = ["Today", "Chores", "Personal development", "Organize", "Projects", "Priority 1", "Priority 2", "Priority 3", "Priority 4", "Priority 5"]
+
+	# Gets from Habitica
+	#tasks = habotica.getTasks(sam) #usr.tasks
+	#tagList = habotica.getTags(sam,"name") #usr.tags
+
+	# Convert list of tag names to sort by into tag ids
+	for i in range(0, len(tagOrder)):
+		tagOrder[i] = usr.tags[tagOrder[i]]
+
+	# Get current (pre-sorted) state of tasks
+	ogTasks = usr.tasks
+
+	# Sort tasks locally before pushing to Habitica
+	tagOrder.reverse() # Lower priority tags should be sorted first so they filter to the back throughout the loop
+	for tag in tagOrder:
+		hits = [] # front of the list
+		misses = [] # back of the list
+		for task in usr.tasks:
+			# For each task, find its tags. If the tag we're sorting by is in its tag list, move it to the front of the list. 
+			thisTag = task["tags"]
+			if tag in thisTag:
+				hits.append(task)
+			else:
+				misses.append(task)
+		usr.tasks = hits + misses
+
+	# Move tasks that are not already in the correct position. 
+	for i in range(0, len(usr.tasks)):
+		if usr.tasks[i]['id'] != ogTasks[i]['id']:
+			# Move task locally
+			ogTasks.insert(i, ogTasks.pop(ogTasks.index(usr.tasks[i])))
+			# Move task on Habitica
+			print("Moving task " + ogTasks[i]['text'])
+			habotica.moveTask(sam, ogTasks[i]['id'], i)
 
 		
 
