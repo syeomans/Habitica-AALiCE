@@ -177,19 +177,19 @@ def sortTodos(usr, tagOrder):
 
 	# Convert list of tag names to sort by into tag ids
 	for i in range(0, len(tagOrder)):
-		tagOrder[i] = usr.tags[tagOrder[i]]
+		tagOrder[i] = usr.tagNameToIdDict[tagOrder[i]]
 
 	# Get current (pre-sorted) state of tasks
-	ogTasks = usr.tasks
+	ogTasks = usr.todos
 
 	# Sort tasks locally before pushing to Habitica
 	tagOrder.reverse() # Lower priority tags should be sorted first so they filter to the back throughout the loop
 	for tag in tagOrder:
 		hits = [] # front of the list
 		misses = [] # back of the list
-		for task in usr.tasks:
+		for task in usr.todos:
 			# For each task, find its tags. If the tag we're sorting by is in its tag list, move it to the front of the list. 
-			thisTag = task["tags"]
+			thisTag = task.tags
 			if tag in thisTag:
 				hits.append(task)
 			else:
@@ -198,7 +198,7 @@ def sortTodos(usr, tagOrder):
 
 	# Move tasks that are not already in the correct position. 
 	for i in range(0, len(usr.tasks)):
-		if usr.tasks[i]['id'] != ogTasks[i]['id']:
+		if usr.todos[i].id != ogTasks[i].id:
 			# Move task locally
 			ogTasks.insert(i, ogTasks.pop(ogTasks.index(usr.tasks[i])))
 			# Move task on Habitica

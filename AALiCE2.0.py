@@ -124,7 +124,7 @@ if datetime.now().hour >= 9 and datetime.now().hour <= 17 and datetime.today().w
 	# If weekday during work hours
 	tagOrder = ["Today", "Work", "Priority 1", "Priority 2", "Priority 3", "Priority 4", "Priority 5"]
 else:
-	tagOrder = ["Today", "Chores", "Personal development", "Organize", "Projects", "Priority 1", "Priority 2", "Priority 3", "Priority 4", "Priority 5"]
+	tagOrder = ["Today", "Chores", "Personal Development", "Organize", "Projects", "Priority 1", "Priority 2", "Priority 3", "Priority 4", "Priority 5"]
 subroutines.sortTodos(sam, tagOrder)
 
 # checkMessages()
