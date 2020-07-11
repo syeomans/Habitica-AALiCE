@@ -1,5 +1,5 @@
-# Dependencies: 
-# Habotica 
+# Dependencies:
+# Habotica
 # pip install python-dateutil   <-- this didn't work for me, but the next one did
 # sudo apt-get install python3-dateutil
 
@@ -10,11 +10,11 @@ from datetime import datetime
 from dateutil.parser import parse
 
 def isDate(string):
-    try: 
-        parse(string)
-        return True
-    except ValueError:
-        return False 
+	try:
+		parse(string)
+		return True
+	except ValueError:
+		return False
 
 def datedTags(usr):
 	# Get user's tags
@@ -67,7 +67,7 @@ def datedTags(usr):
 			today = date.today()
 			inList = dueDate.split("-")
 			targetDate = date(int(inList[0]), int(inList[1]), int(inList[2]))
-			daysAway = (targetDate - today).days 
+			daysAway = (targetDate - today).days
 			if daysAway <= 1:
 				addTagDict["Today"] = True
 			elif daysAway == 2:
@@ -88,7 +88,7 @@ def datedTags(usr):
 			# Check if the text between curly braces is a valid date
 			if (isDate(targetText)):
 				# Convert text to datetime object
-				targetDate = parse(targetText) 
+				targetDate = parse(targetText)
 				# Calculate days between target date and today's date
 				daysAway = (targetDate - datetime.now()).days + 1
 				# Assign a tag to apply based on the number of days from now
@@ -113,7 +113,7 @@ def datedTags(usr):
 				# Check if the text between curly braces is a valid date
 				if (isDate(targetText)):
 					# Convert text to datetime object
-					targetDate = parse(targetText) 
+					targetDate = parse(targetText)
 					# Calculate days between target date and today's date
 					daysAway = (targetDate - datetime.now()).days + 1
 					# Assign a tag to apply based on the number of days from now
@@ -140,7 +140,7 @@ def datedTags(usr):
 						# Check if the text between curly braces is a valid date
 						if (isDate(targetText)):
 							# Convert text to datetime object
-							targetDate = parse(targetText) 
+							targetDate = parse(targetText)
 							# Calculate days between target date and today's date
 							daysAway = (targetDate - datetime.now()).days + 1
 							# Assign a tag to apply based on the number of days from now
@@ -166,46 +166,37 @@ def datedTags(usr):
 			if tagDict[key] not in todo.tags and addTagDict[key] == True:
 				print('Adding tag "' + key + '" to task "' + todo.text + '"')
 				todo.addTag(tagDict[key])
-				
-def sortTodos(usr, tagOrder):				
-	# Configs
-	#sortTags = ["Today", "Chores", "Personal development", "Organize", "Projects", "Priority 1", "Priority 2", "Priority 3", "Priority 4", "Priority 5"]
 
-	# Gets from Habitica
-	#tasks = habotica.getTasks(sam) #usr.tasks
-	#tagList = habotica.getTags(sam,"name") #usr.tags
+def sortTodos(usr, tagOrder):
 
 	# Convert list of tag names to sort by into tag ids
 	for i in range(0, len(tagOrder)):
 		tagOrder[i] = usr.tagNameToIdDict[tagOrder[i]]
 
 	# Get current (pre-sorted) state of tasks
-	ogTasks = usr.todos
+	newTodos = usr.todos[:]
 
 	# Sort tasks locally before pushing to Habitica
 	tagOrder.reverse() # Lower priority tags should be sorted first so they filter to the back throughout the loop
 	for tag in tagOrder:
 		hits = [] # front of the list
 		misses = [] # back of the list
-		for task in usr.todos:
-			# For each task, find its tags. If the tag we're sorting by is in its tag list, move it to the front of the list. 
+		for task in newTodos:
+			# For each task, find its tags. If the tag we're sorting by is in
+			# its tag list, move it to the front of the list. Also, if the
+			# task is untagged, move it to the front of the list.
 			thisTag = task.tags
-			if tag in thisTag:
+			if tag in thisTag or thisTag == []:
 				hits.append(task)
 			else:
 				misses.append(task)
-		usr.tasks = hits + misses
+		newTodos = hits + misses
 
-	# Move tasks that are not already in the correct position. 
-	for i in range(0, len(usr.tasks)):
-		if usr.todos[i].id != ogTasks[i].id:
+	# Move tasks that are not already in the correct position.
+	for i in range(0, len(usr.todos)):
+		if usr.todos[i].id != newTodos[i].id:
 			# Move task locally
-			ogTasks.insert(i, ogTasks.pop(ogTasks.index(usr.tasks[i])))
+			usr.todos.insert(i, usr.todos.pop(usr.todos.index(newTodos[i])))
 			# Move task on Habitica
-			print("Moving task " + ogTasks[i]['text'])
-			habotica.moveTask(sam, ogTasks[i]['id'], i)
-
-		
-
-
-
+			print("Moving task " + newTodos[i].text)
+			habotica.moveTask(usr.credentials, str(newTodos[i].id), i)

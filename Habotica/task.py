@@ -57,7 +57,7 @@ class task:
 		"""
 		Task - Delete a checklist item from a task
 
-		TODO: move to children classes that use this 
+		TODO: move to children classes that use this
 
 		itemId: The checklist item _id
 		"""
@@ -126,8 +126,8 @@ class task:
 		payload = {"text": text}
 		return(putUrl(url, self.credentials, payload))
 
-	def updateTask(self, text = None, attribute = None, collapseChecklist = None, notes = None, 
-				date = None, priority = None, reminders = None, frequency = None, repeat = True, 
+	def updateTask(self, text = None, attribute = None, collapseChecklist = None, notes = None,
+				date = None, priority = None, reminders = None, frequency = None, repeat = True,
 				everyX = 1, streak = 0, startDate = None, up = True, down = True, value = 0):
 		"""
 		Task - Update a task
@@ -144,34 +144,34 @@ class task:
 		priority (optional): Number. Difficulty, options are 0.1, 1, 1.5, 2; eqivalent of Trivial, Easy, Medium, Hard.
 			Default value: 1
 			Allowed values: "0.1", "1", "1.5", "2"
-		reminders (optional): String[]. Array of reminders, each an object that must include: a UUID, startDate and time. 
+		reminders (optional): String[]. Array of reminders, each an object that must include: a UUID, startDate and time.
 			For example {"id":"ed427623-9a69-4aac-9852-13deb9c190c3","startDate":"1/16/17","time":"1/16/17" }
-		frequency (optional): String. Value "weekly" enables "On days of the week", value "daily" enables "EveryX Days". 
+		frequency (optional): String. Value "weekly" enables "On days of the week", value "daily" enables "EveryX Days".
 			Only valid for type "daily".
 			Default value: weekly
 			Allowed values: "weekly", "daily"
-		repeat (optional): String. List of objects for days of the week, Days that are true will be repeated upon. 
-			Only valid for type "daily". Any days not specified will be marked as true. Days are: su, m, t, w, th, f, s. 
+		repeat (optional): String. List of objects for days of the week, Days that are true will be repeated upon.
+			Only valid for type "daily". Any days not specified will be marked as true. Days are: su, m, t, w, th, f, s.
 			Value of frequency must be "weekly". For example, to skip repeats on Mon & Fri: "repeat":{"f":false,"m":false}
 			Default value: true
-		everyX (optional): Number. Value of frequency must be "daily", the number of days until this daily task is 
+		everyX (optional): Number. Value of frequency must be "daily", the number of days until this daily task is
 			available again.
 			Default value: 1
-		streak (optional): Number. Number of days that the task has consecutively been checked off. 
+		streak (optional): Number. Number of days that the task has consecutively been checked off.
 			Only valid for type "daily"
 			Default value: 0
 		startDate (optional): Date. Date when the task will first become available. Only valid for type "daily"
-		up (optional): Boolean. Only valid for type "habit." If true, enables the "+" under "Directions/Action" for 
+		up (optional): Boolean. Only valid for type "habit." If true, enables the "+" under "Directions/Action" for
 			"Good habits."
 			Default value: true
-		down (optional): Boolean. Only valid for type "habit." If true, enables the "-" under "Directions/Action" for 
+		down (optional): Boolean. Only valid for type "habit." If true, enables the "-" under "Directions/Action" for
 			"Bad habits."
 			Default value: true
 		value (optional): Number. Only valid for type "reward." The cost in gold of the reward.
 			Default value: 0
 		"""
 		url = "https://habitica.com/api/v3/tasks/" + self.id
-		payload = {} 
+		payload = {}
 		if text != None:
 			payload["text"] = text
 			self.text = text
@@ -442,8 +442,8 @@ def assignTask(creds, taskId, assignedUserId):
 	url = "https://habitica.com/api/v3/tasks/" + taskId + "/assign/" + assignedUserId
 	return(postUrl(url, creds))
 
-def createChallengeTask(creds, challengeId, text, taskType, alias = None, attribute = None, collapseChecklist = False, 
-						notes = None, date = None, priority = 1, reminders = None, frequency = "weekly", 
+def createChallengeTask(creds, challengeId, text, taskType, alias = None, attribute = None, collapseChecklist = False,
+						notes = None, date = None, priority = 1, reminders = None, frequency = "weekly",
 						repeat = True, everyX = 1, streak = 0, startDate = None, up = True, down = True, value = 0):
 	"""
 	Task - Create a new task belonging to a challenge
@@ -463,34 +463,34 @@ def createChallengeTask(creds, challengeId, text, taskType, alias = None, attrib
 	priority (optional): Number. Difficulty, options are 0.1, 1, 1.5, 2; eqivalent of Trivial, Easy, Medium, Hard.
 		Default value: 1
 		Allowed values: "0.1", "1", "1.5", "2"
-	reminders (optional): String[]. Array of reminders, each an object that must include: a UUID, startDate and time. 
+	reminders (optional): String[]. Array of reminders, each an object that must include: a UUID, startDate and time.
 		For example {"id":"ed427623-9a69-4aac-9852-13deb9c190c3","startDate":"1/16/17","time":"1/16/17" }
-	frequency (optional): String. Value "weekly" enables "On days of the week", value "daily" enables "EveryX Days". 
+	frequency (optional): String. Value "weekly" enables "On days of the week", value "daily" enables "EveryX Days".
 		Only valid for type "daily".
 		Default value: weekly
 		Allowed values: "weekly", "daily"
-	repeat (optional): String. List of objects for days of the week, Days that are true will be repeated upon. 
-		Only valid for type "daily". Any days not specified will be marked as true. Days are: su, m, t, w, th, f, s. 
+	repeat (optional): String. List of objects for days of the week, Days that are true will be repeated upon.
+		Only valid for type "daily". Any days not specified will be marked as true. Days are: su, m, t, w, th, f, s.
 		Value of frequency must be "weekly". For example, to skip repeats on Mon & Fri: "repeat":{"f":false,"m":false}
 		Default value: true
-	everyX (optional): Number. Value of frequency must be "daily", the number of days until this daily task is 
+	everyX (optional): Number. Value of frequency must be "daily", the number of days until this daily task is
 		available again.
 		Default value: 1
-	streak (optional): Number. Number of days that the task has consecutively been checked off. 
+	streak (optional): Number. Number of days that the task has consecutively been checked off.
 		Only valid for type "daily"
 		Default value: 0
 	startDate (optional): Date. Date when the task will first become available. Only valid for type "daily"
-	up (optional): Boolean. Only valid for type "habit." If true, enables the "+" under "Directions/Action" for 
+	up (optional): Boolean. Only valid for type "habit." If true, enables the "+" under "Directions/Action" for
 		"Good habits."
 		Default value: true
-	down (optional): Boolean. Only valid for type "habit." If true, enables the "-" under "Directions/Action" for 
+	down (optional): Boolean. Only valid for type "habit." If true, enables the "-" under "Directions/Action" for
 		"Bad habits."
 		Default value: true
 	value (optional): Number. Only valid for type "reward." The cost in gold of the reward.
 		Default value: 0
 	"""
 	url = "https://habitica.com/api/v3/tasks/challenge/" + challengeId
-	payload = {"text": text, "type": taskType} 
+	payload = {"text": text, "type": taskType}
 	if alias != None:
 		payload["alias"] = alias
 	if attribute != None:
@@ -532,16 +532,16 @@ def getTasks(creds, taskType = None):
 
 	The returned dictionaries' structure depends on the type of task. Keys defined below:
 
-	todos keys: attribute, checklist, group, collapseChecklist, tags, text, challenge, userId, value, 
+	todos keys: attribute, checklist, group, collapseChecklist, tags, text, challenge, userId, value,
 		id, priority, completed, notes, updatedAt, _id, type, reminders, createdAt
-	dailys keys: streak, startDate, isDue, attribute, userId, frequency, updatedAt, id, createdAt, 
-		daysOfMonth, group, collapseChecklist, priority, text, type, repeat, tags, checklist, completed, 
+	dailys keys: streak, startDate, isDue, attribute, userId, frequency, updatedAt, id, createdAt,
+		daysOfMonth, group, collapseChecklist, priority, text, type, repeat, tags, checklist, completed,
 		nextDue, weeksOfMonth, yesterDaily, challenge, reminders, everyX, value, _id, notes, history
-	habits keys: attribute, counterUp, group, tags, down, text, challenge, counterDown, userId, up, 
+	habits keys: attribute, counterUp, group, tags, down, text, challenge, counterDown, userId, up,
 		value, id, priority, frequency, notes, updatedAt, _id, type, reminders, createdAt, history
-	rewards keys: attribute, group, tags, text, challenge, userId, value, id, priority, notes, updatedAt, 
+	rewards keys: attribute, group, tags, text, challenge, userId, value, id, priority, notes, updatedAt,
 		_id, type, reminders, createdAt
-	completedTodos keys: attribute, dateCompleted, checklist, group, collapseChecklist, tags, text, 
+	completedTodos keys: attribute, dateCompleted, checklist, group, collapseChecklist, tags, text,
 		challenge, userId, value, id, priority, completed, notes, updatedAt, _id, type, reminders, createdAt
 	"""
 	if taskType == None:
@@ -562,8 +562,8 @@ def createGroupTask(creds, groupId):
 	payload = {"groupId": groupId}
 	return(postUrl(url, creds, payload))
 
-def createTask(creds, text, taskType, tags = None, alias = None, attribute = None, collapseChecklist = False, 
-				notes = None, date = None, priority = 1, reminders = None, frequency = "weekly", repeat = True, 
+def createTask(creds, text, taskType, tags = None, alias = None, attribute = None, collapseChecklist = False,
+				notes = None, date = None, priority = 1, reminders = None, frequency = "weekly", repeat = True,
 				everyX = 1, streak = 0, startDate = None, up = True, down = True, value = 0):
 	"""
 	Task - Create a new task belonging to the user
@@ -584,34 +584,34 @@ def createTask(creds, text, taskType, tags = None, alias = None, attribute = Non
 	priority (optional): Number. Difficulty, options are 0.1, 1, 1.5, 2; eqivalent of Trivial, Easy, Medium, Hard.
 		Default value: 1
 		Allowed values: "0.1", "1", "1.5", "2"
-	reminders (optional): String[]. Array of reminders, each an object that must include: a UUID, startDate and time. 
+	reminders (optional): String[]. Array of reminders, each an object that must include: a UUID, startDate and time.
 		For example {"id":"ed427623-9a69-4aac-9852-13deb9c190c3","startDate":"1/16/17","time":"1/16/17" }
-	frequency (optional): String. Value "weekly" enables "On days of the week", value "daily" enables "EveryX Days". 
+	frequency (optional): String. Value "weekly" enables "On days of the week", value "daily" enables "EveryX Days".
 		Only valid for type "daily".
 		Default value: weekly
 		Allowed values: "weekly", "daily"
-	repeat (optional): String. List of objects for days of the week, Days that are true will be repeated upon. 
-		Only valid for type "daily". Any days not specified will be marked as true. Days are: su, m, t, w, th, f, s. 
+	repeat (optional): String. List of objects for days of the week, Days that are true will be repeated upon.
+		Only valid for type "daily". Any days not specified will be marked as true. Days are: su, m, t, w, th, f, s.
 		Value of frequency must be "weekly". For example, to skip repeats on Mon & Fri: "repeat":{"f":false,"m":false}
 		Default value: true
-	everyX (optional): Number. Value of frequency must be "daily", the number of days until this daily task is 
+	everyX (optional): Number. Value of frequency must be "daily", the number of days until this daily task is
 		available again.
 		Default value: 1
-	streak (optional): Number. Number of days that the task has consecutively been checked off. 
+	streak (optional): Number. Number of days that the task has consecutively been checked off.
 		Only valid for type "daily"
 		Default value: 0
 	startDate (optional): Date. Date when the task will first become available. Only valid for type "daily"
-	up (optional): Boolean. Only valid for type "habit." If true, enables the "+" under "Directions/Action" for 
+	up (optional): Boolean. Only valid for type "habit." If true, enables the "+" under "Directions/Action" for
 		"Good habits."
 		Default value: true
-	down (optional): Boolean. Only valid for type "habit." If true, enables the "-" under "Directions/Action" for 
+	down (optional): Boolean. Only valid for type "habit." If true, enables the "-" under "Directions/Action" for
 		"Bad habits."
 		Default value: true
 	value (optional): Number. Only valid for type "reward." The cost in gold of the reward.
 		Default value: 0
 	"""
 	url = "https://habitica.com/api/v3/tasks/user"
-	payload = {"text": text, "type": taskType} 
+	payload = {"text": text, "type": taskType}
 	if tags != None:
 		payload["tags"] = tags
 	if alias != None:
@@ -765,7 +765,7 @@ def moveGroupTask(creds, groupId, taskId, position):
 def moveTask(creds, taskId, position):
 	"""
 	Task - Move a task to a new position
-	Note: completed To-Dos are not sortable, do not appear in user.tasksOrder.todos, and are ordered by date of 
+	Note: completed To-Dos are not sortable, do not appear in user.tasksOrder.todos, and are ordered by date of
 	completion.
 
 	creds: a dictionary of user credentials formatted as: {'x-api-user': 'your_user_id', 'x-api-key': 'your_api_key'}
@@ -827,7 +827,7 @@ def unlinkTasks(creds, challengeId, keep=None):
 
 	creds: a dictionary of user credentials formatted as: {'x-api-user': 'your_user_id', 'x-api-key': 'your_api_key'}
 	challengeId: The challenge _id
-	keep (optional): Specifies if tasks should be kept(keep-all) or removed(remove-all) after the unlink 
+	keep (optional): Specifies if tasks should be kept(keep-all) or removed(remove-all) after the unlink
 		Allowed values: 'keep-all', 'remove-all'
 	"""
 	if keep == None:
@@ -850,8 +850,8 @@ def updateChecklist(creds, taskId, itemId, text):
 	payload = {"text": text}
 	return(putUrl(url, creds, payload))
 
-def updateTask(creds, taskId, text = None, attribute = None, collapseChecklist = False, notes = None, 
-				date = None, priority = 1, reminders = None, frequency = "weekly", repeat = True, 
+def updateTask(creds, taskId, text = None, attribute = None, collapseChecklist = False, notes = None,
+				date = None, priority = 1, reminders = None, frequency = "weekly", repeat = True,
 				everyX = 1, streak = 0, startDate = None, up = True, down = True, value = 0):
 	"""
 	Task - Update a task
@@ -868,34 +868,34 @@ def updateTask(creds, taskId, text = None, attribute = None, collapseChecklist =
 	priority (optional): Number. Difficulty, options are 0.1, 1, 1.5, 2; eqivalent of Trivial, Easy, Medium, Hard.
 		Default value: 1
 		Allowed values: "0.1", "1", "1.5", "2"
-	reminders (optional): String[]. Array of reminders, each an object that must include: a UUID, startDate and time. 
+	reminders (optional): String[]. Array of reminders, each an object that must include: a UUID, startDate and time.
 		For example {"id":"ed427623-9a69-4aac-9852-13deb9c190c3","startDate":"1/16/17","time":"1/16/17" }
-	frequency (optional): String. Value "weekly" enables "On days of the week", value "daily" enables "EveryX Days". 
+	frequency (optional): String. Value "weekly" enables "On days of the week", value "daily" enables "EveryX Days".
 		Only valid for type "daily".
 		Default value: weekly
 		Allowed values: "weekly", "daily"
-	repeat (optional): String. List of objects for days of the week, Days that are true will be repeated upon. 
-		Only valid for type "daily". Any days not specified will be marked as true. Days are: su, m, t, w, th, f, s. 
+	repeat (optional): String. List of objects for days of the week, Days that are true will be repeated upon.
+		Only valid for type "daily". Any days not specified will be marked as true. Days are: su, m, t, w, th, f, s.
 		Value of frequency must be "weekly". For example, to skip repeats on Mon & Fri: "repeat":{"f":false,"m":false}
 		Default value: true
-	everyX (optional): Number. Value of frequency must be "daily", the number of days until this daily task is 
+	everyX (optional): Number. Value of frequency must be "daily", the number of days until this daily task is
 		available again.
 		Default value: 1
-	streak (optional): Number. Number of days that the task has consecutively been checked off. 
+	streak (optional): Number. Number of days that the task has consecutively been checked off.
 		Only valid for type "daily"
 		Default value: 0
 	startDate (optional): Date. Date when the task will first become available. Only valid for type "daily"
-	up (optional): Boolean. Only valid for type "habit." If true, enables the "+" under "Directions/Action" for 
+	up (optional): Boolean. Only valid for type "habit." If true, enables the "+" under "Directions/Action" for
 		"Good habits."
 		Default value: true
-	down (optional): Boolean. Only valid for type "habit." If true, enables the "-" under "Directions/Action" for 
+	down (optional): Boolean. Only valid for type "habit." If true, enables the "-" under "Directions/Action" for
 		"Bad habits."
 		Default value: true
 	value (optional): Number. Only valid for type "reward." The cost in gold of the reward.
 		Default value: 0
 	"""
 	url = "https://habitica.com/api/v3/tasks/" + taskId
-	payload = {} 
+	payload = {}
 	if text != None:
 		payload["text"] = text
 	if attribute != None:
