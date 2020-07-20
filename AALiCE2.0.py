@@ -58,14 +58,14 @@ tagHabit = aalice.habits[tagHabitIndex]
 print("Checking Sam's dated tags")
 sam.initTasks()
 subroutines.datedTags(sam)
-print('Scoring habit')
-tagHabit.scoreTask('up')
+#print('Scoring habit')
+#tagHabit.scoreTask('up')
 
 print("Checking Lauren's dated tags")
 lauren.initTasks()
 subroutines.datedTags(lauren)
-print('Scoring habit')
-tagHabit.scoreTask('up')
+#print('Scoring habit')
+#tagHabit.scoreTask('up')
 
 # Check class and perform the correct operations
 if aalice.rpgclass == "healer":
